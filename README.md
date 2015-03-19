@@ -1,7 +1,7 @@
 # morphine
 living high on simple DI
 
-Heavily inspired by Angular ui.router [$resolve](http://angular-ui.github.io/ui-router/site/#/api/ui.router.util.$resolve)
+Heavily inspired by Angular ui.router [$resolve](http://angular-ui.github.io/ui-router/site/#/api/ui.router.util.$resolve).
 I wrote this after a stressful day of Shepherd.js and other DI libs making me feel stupid. I am making some micro-services and didn't want to deal with proper DI, I just wanted something like a recursive `Promise.all()`
 
 Ripped some regex magic out of Angular's $inject code, combined with a rewrite of ui.router's $resolve, and you get some sexy Promise dependency injection thing that looks like it was made with sweet.js.
