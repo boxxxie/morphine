@@ -122,8 +122,9 @@ function resolve(invokables, knowns){
   }
 
   var flatInvokables = convertToExpandedNotation(invokables);
+  var safeKnowns = knowns || {};
 
-  return resolveFlatInvokables(flatInvokables, knowns);
+  return resolveFlatInvokables(flatInvokables, safeKnowns);
 }
 
 module.exports = resolve;
