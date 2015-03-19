@@ -2,19 +2,6 @@ var _ = require("lodash-contrib");
 /*jshint -W079 */
 var Promise = require("bluebird");
 
-/*
-
-resolve(invokes, known);
-goal, shrink the invokeables, grow the knowns
-when invokes are empty, job is done, return knowns.
-
-groupby functions with known arguments,
-invoke all of those functions,
-when done, merge with knowns,
-resolve again with knew knowns, and less invokables.
-
-*/
-
 var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 var FN_ARG_SPLIT = /,/;
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -58,11 +45,11 @@ function resolve(invokables, knowns){
     .flatten()
     .value();
 
-    console.log("invokablesAnnotations", invokablesAnnotations, invokables);
+//     console.log("invokablesAnnotations", invokablesAnnotations, invokables);
 
     var knownNames = _.keys(knowns);
 
-    console.log("knownNames", knownNames);
+//     console.log("knownNames", knownNames);
 
     var unknownResolutions = _.difference(invokablesAnnotations, knownNames);
 
@@ -81,7 +68,7 @@ function resolve(invokables, knowns){
         return _.every(pair[2], _.partial(_.has, knowns));
       });
 
-      console.log("groupedInvokables", JSON.stringify(groupedInvokables));
+//       console.log("groupedInvokables", JSON.stringify(groupedInvokables));
 
       var invokeNow = groupedInvokables.true;
       var invokeLater = groupedInvokables.false;
@@ -95,7 +82,7 @@ function resolve(invokables, knowns){
         return invokableGroup.concat([resolvedArgs]);
       });
 
-      console.log("invokeNowsWithResolvedArgs", invokeNowsWithResolvedArgs);
+//       console.log("invokeNowsWithResolvedArgs", invokeNowsWithResolvedArgs);
 
       var applyResolvedArgs = _.map(invokeNowsWithResolvedArgs, function(invokableGroup){
         var fn = invokableGroup[1];
@@ -113,14 +100,14 @@ function resolve(invokables, knowns){
         .map(_.juxt(_.compose(_.first,_.first),_.last))
         .object()
         .value();
-        console.log("new knowns", newKnowns);
+//         console.log("new knowns", newKnowns);
 
-        console.log("knowns", knowns);
-        console.log("newKnowns", newKnowns);
+//         console.log("knowns", knowns);
+//         console.log("newKnowns", newKnowns);
 
         var combinedKnowns = _.merge(knowns, newKnowns);
 
-        console.log("combinedKnowns", combinedKnowns);
+//         console.log("combinedKnowns", combinedKnowns);
 
         if(checkForUnresolvables(newKnowns, knowns)){
           var unresolveables = pendingResolutions(invokeLater, combinedKnowns);
