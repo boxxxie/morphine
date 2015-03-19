@@ -1,0 +1,19 @@
+{
+  "name": "morphine",
+  "version": "1.0.0",
+  "description": "almost DI, for situations where DI is too much, and you want to avoid the hard stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "drugs",
+    "di",
+    "dependency",
+    "injection",
+    "hard",
+    "addiction"
+  ],
+  "author": "Paul Iannazzo",
+  "license": "ISC"
+}
