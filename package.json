@@ -1,6 +1,6 @@
 {
   "name": "morphine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "almost DI, for situations where DI is too much, and you want to avoid the hard stuff",
   "main": "index.js",
   "scripts": {
