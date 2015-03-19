@@ -43,6 +43,7 @@ function resolve(invokables, knowns){
     var invokablesAnnotations = _.chain(invokables)
     .map(_.property(2))
     .flatten()
+    .unique()
     .value();
 
 //     console.log("invokablesAnnotations", invokablesAnnotations, invokables);
