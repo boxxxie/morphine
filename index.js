@@ -95,7 +95,7 @@ function resolve(invokables, knowns){
 
       return Promise.all(applyResolvedArgs)
       .then(function(resolutions){
-        console.log("resolutions", resolutions);
+//         console.log("resolutions", resolutions);
         var newKnowns = _.chain(invokeNowsWithResolvedArgs)
         .zip(resolutions)
         .map(_.juxt(_.compose(_.first,_.first),_.last))
