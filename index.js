@@ -9,12 +9,10 @@ var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 
 function miniAnnotate(fn){
   var fnText = fn.toString().replace(STRIP_COMMENTS, '');
-  //   console.log("fnText",fnText);
   var argDecl = fnText.match(FN_ARGS);
-  //   console.log("argDecl",argDecl);
   var fnArgs = argDecl[1].split(FN_ARG_SPLIT);
-  //   console.log("fnArgs",fnArgs);
   return _.map(fnArgs, function(arg){
+    //FIXME: when functions have no deps, they get the "" dep here...
     return arg.trim();
   });
 }
@@ -46,11 +44,7 @@ function resolve(invokables, knowns){
     .unique()
     .value();
 
-//     console.log("invokablesAnnotations", invokablesAnnotations, invokables);
-
     var knownNames = _.keys(knowns);
-
-//     console.log("knownNames", knownNames);
 
     var unknownResolutions = _.difference(invokablesAnnotations, knownNames);
 
@@ -66,10 +60,9 @@ function resolve(invokables, knowns){
     }
     else{
       var groupedInvokables = _.groupBy(invokables,function(pair){
+        //FIXME: find stuff that has no dependencies (fn.length === 0)
         return _.every(pair[2], _.partial(_.has, knowns));
       });
-
-//       console.log("groupedInvokables", JSON.stringify(groupedInvokables));
 
       var invokeNow = groupedInvokables.true;
       var invokeLater = groupedInvokables.false;
@@ -83,8 +76,6 @@ function resolve(invokables, knowns){
         return invokableGroup.concat([resolvedArgs]);
       });
 
-//       console.log("invokeNowsWithResolvedArgs", invokeNowsWithResolvedArgs);
-
       var applyResolvedArgs = _.map(invokeNowsWithResolvedArgs, function(invokableGroup){
         var fn = invokableGroup[1];
         var args = invokableGroup[3];
@@ -95,20 +86,13 @@ function resolve(invokables, knowns){
 
       return Promise.all(applyResolvedArgs)
       .then(function(resolutions){
-//         console.log("resolutions", resolutions);
         var newKnowns = _.chain(invokeNowsWithResolvedArgs)
         .zip(resolutions)
         .map(_.juxt(_.compose(_.first,_.first),_.last))
         .object()
         .value();
-//         console.log("new knowns", newKnowns);
-
-//         console.log("knowns", knowns);
-//         console.log("newKnowns", newKnowns);
 
         var combinedKnowns = _.merge(knowns, newKnowns);
-
-//         console.log("combinedKnowns", combinedKnowns);
 
         if(checkForUnresolvables(newKnowns, knowns)){
           var unresolveables = pendingResolutions(invokeLater, combinedKnowns);
