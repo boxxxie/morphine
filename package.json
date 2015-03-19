@@ -15,5 +15,9 @@
     "addiction"
   ],
   "author": "Paul Iannazzo",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.9.14",
+    "lodash-contrib": "^241.4.14"
+  }
 }
