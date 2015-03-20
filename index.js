@@ -8,11 +8,13 @@ var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 
 
 function miniAnnotate(fn){
+  if(fn.length === 0){
+    return [];
+  }
   var fnText = fn.toString().replace(STRIP_COMMENTS, '');
   var argDecl = fnText.match(FN_ARGS);
   var fnArgs = argDecl[1].split(FN_ARG_SPLIT);
   return _.map(fnArgs, function(arg){
-    //FIXME: when functions have no deps, they get the "" dep here...
     return arg.trim();
   });
 }
@@ -60,7 +62,6 @@ function resolve(invokables, knowns){
     }
     else{
       var groupedInvokables = _.groupBy(invokables,function(pair){
-        //FIXME: find stuff that has no dependencies (fn.length === 0)
         return _.every(pair[2], _.partial(_.has, knowns));
       });
 
@@ -108,9 +109,7 @@ function resolve(invokables, knowns){
   var flatInvokables = convertToExpandedNotation(invokables);
   var safeKnowns = knowns || {};
 
-  var handleZeroArgs = _.partial(_.assign, {"":""});
-
-  return resolveFlatInvokables(flatInvokables, handleZeroArgs(safeKnowns))
+  return resolveFlatInvokables(flatInvokables, safeKnowns)
   .then(function(resolutions){
     return _.omit(resolutions, "");
   });
